@@ -122,11 +122,11 @@ function record() {
         ...videoStream.getVideoTracks(),
         ...audioStream.getAudioTracks()
     ])
-    // 配置 MediaRecorder，设置高质量选项
+    // 配置 MediaRecorder，设置高质量选项并使用 MP4 格式
     const options = {
-        mimeType: "video/webm; codecs=vp9",
-        videoBitsPerSecond: 10000000, // 10Mbps 视频比特率
-        audioBitsPerSecond: 128000    // 128kbps 音频比特率
+        mimeType: "video/mp4; codecs=avc1.42E01E,mp4a.40.2", // H.264 和 AAC
+        videoBitsPerSecond: 10000000,
+        audioBitsPerSecond: 128000
     }
     mediaRecorder = new MediaRecorder(combinedStream, options);
 
@@ -137,11 +137,11 @@ function record() {
 
     // 停止录制时生成并下载视频
     mediaRecorder.onstop = () => {
-        let blob = new Blob(recordedChunks, {type: "video/webm"});
+        let blob = new Blob(recordedChunks, {type: "video/mp4"});
         let url = URL.createObjectURL(blob);
         let a = document.createElement("a");
         a.href = url;
-        a.download = "video_with_user_controlled_sounds.webm";
+        a.download = "video_with_user_controlled_sounds.mp4";
         a.click();
         recordedChunks = [];
     };
