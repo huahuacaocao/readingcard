@@ -1,13 +1,49 @@
-// 数据部分 - 开始
-const imageData = ["https://lf-bot-studio-plugin-resource.coze.cn/obj/bot-studio-platform-plugin-tos/artist/image/421e1de862904707a7c5e58be6fdebb7.png"]
-const topicData = {"en": "Panda", "zh": "熊猫"}
-const topicAudioData = "https://lf-bot-studio-plugin-resource.coze.cn/obj/bot-studio-platform-plugin-tos/sami/tts/96fb9f316b7d4968b70ebebd6146e448.mp3"
-const contentData = [
-    {"en": "A panda.", "zh": "一只熊猫。"},
-    {"en": "This is a panda.", "zh": "这是一只熊猫。"},
-    {"en": "I like pandas.", "zh": "我喜欢熊猫。"},
-    {"en": "Pandas are very cute.", "zh": "熊猫非常可爱。"},
-    {"en": "Pandas live in China.", "zh": "熊猫生活在中国。"}
-]
-const contentAudioData = ["https://lf-bot-studio-plugin-resource.coze.cn/obj/bot-studio-platform-plugin-tos/sami/tts/edc45669415e4284a580aa54ce18c62e.mp3", "https://lf-bot-studio-plugin-resource.coze.cn/obj/bot-studio-platform-plugin-tos/sami/tts/fb8459b145874ce19909d083e2f5edbe.mp3", "https://lf-bot-studio-plugin-resource.coze.cn/obj/bot-studio-platform-plugin-tos/sami/tts/12ad006ffae6403a981c58676adb8508.mp3", "https://lf-bot-studio-plugin-resource.coze.cn/obj/bot-studio-platform-plugin-tos/sami/tts/ffbb11779b394edab619cd84c4b0830a.mp3", "https://lf-bot-studio-plugin-resource.coze.cn/obj/bot-studio-platform-plugin-tos/sami/tts/dd7aa1a3ce8c436b8b6ffab64132ef3f.mp3"]
-// 数据部分 - 结束
+const jsonData = {
+    "topicData": {
+        "en": "Panda",
+        "zh": "熊猫"
+    },
+    "imageData": [
+        "https://lf-bot-studio-plugin-resource.coze.cn/obj/bot-studio-platform-plugin-tos/artist/image/f88545b0d177454daa7db641218f98d0.png"
+    ],
+    "topicAudioData": "https://lf9-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7468512265134800947_0af1c905-a249-4544-a1c7-16fb6b43abae.mp3?lk3s=da27ec82&x-expires=1744089024&x-signature=By%2Bi6V4Wyfz1b%2FkCN3ENvAW5ekc%3D",
+    "contentAudioData": [
+        "https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7468512265134800947_b1763c83-b878-4e78-9bc4-1601f7d65f76.mp3?lk3s=da27ec82&x-expires=1744088742&x-signature=Knd32uZQkMn0N8XSLustWoNJhBo%3D",
+        "https://lf26-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7468512265134800947_0ab887ce-4acf-470c-b1af-a5282ed3142c.mp3?lk3s=da27ec82&x-expires=1744088743&x-signature=xZrNRHCJdrZKnN%2FclIPWQl9GgP4%3D",
+        "https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7468512265134800947_4eea7164-86bd-497c-bde6-f920ed8b12df.mp3?lk3s=da27ec82&x-expires=1744088743&x-signature=msXigcaWEyQ%2B9k3wNtG3LohSyLg%3D",
+        "https://lf3-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7468512265134800947_6b288daf-6023-438a-a5b1-61c06b7fcf7d.mp3?lk3s=da27ec82&x-expires=1744088744&x-signature=Y7j7VqlxcSxahrBNwFpML9kGiiU%3D",
+        "https://lf6-appstore-sign.oceancloudapi.com/ocean-cloud-tos/VolcanoUserVoice/speech_7468512265134800947_842e1e02-4488-4e46-987f-b536a2d72674.mp3?lk3s=da27ec82&x-expires=1744088745&x-signature=Co6d8pJYEvouhZvDz4b%2FZPeiXdM%3D"
+    ],
+    "contentData": [
+        {
+            "en": "A panda.",
+            "zh": "一只熊猫。"
+        },
+        {
+            "en": "This is a panda.",
+            "zh": "这是一只熊猫。"
+        },
+        {
+            "en": "I like pandas.",
+            "zh": "我喜欢熊猫。"
+        },
+        {
+            "en": "Pandas live in China.",
+            "zh": "熊猫生活在中国。"
+        },
+        {
+            "en": "The pandas are eating bamboo.",
+            "zh": "熊猫们正在吃竹子。"
+        }
+    ]
+}
+
+const imageData = jsonData.imageData
+const topicData = jsonData.topicData
+const topicAudioData = jsonData.topicAudioData
+const contentData = jsonData.contentData
+const contentAudioData = jsonData.contentAudioData
+
+
+
+

@@ -58,6 +58,7 @@ let currentIndex = -1
 let canvasWidth, canvasHeight
 let backgroundImgBlur, backgroundImgClear
 let downImgHeight, downImgY, blurY
+let topicAudio
 const data = []
 
 // 预加载资源
@@ -71,6 +72,7 @@ function preload() {
             audio: loadSound(contentAudioData[i])
         }
     }
+    topicAudio = loadSound(topicAudioData)
 }
 
 // 计算画布大小
@@ -90,11 +92,11 @@ let yContent, hContent
 function calcPos() {
     let minFontSize = 8
     let maxFontSize = 28
-    let baseFontSize = constrain(canvasHeight * 0.04, minFontSize, maxFontSize)
+    let baseFontSize = myConstrain(canvasHeight * 0.04, minFontSize, maxFontSize)
     // 文章字体
-    sTitle = int(constrain(baseFontSize * 1.4, minFontSize, maxFontSize))
-    sTopic = int(constrain(baseFontSize * 1, minFontSize, maxFontSize * 0.9))
-    sContent = int(constrain(baseFontSize * 1, minFontSize, maxFontSize * 0.7))
+    sTitle = int(myConstrain(baseFontSize * 1.4, minFontSize, maxFontSize))
+    sTopic = int(myConstrain(baseFontSize * 1, minFontSize, maxFontSize * 0.9))
+    sContent = int(myConstrain(baseFontSize * 1, minFontSize, maxFontSize * 0.7))
     // 文章位置
     let lineSpacing = canvasHeight * 0.04
     yTitle = canvasHeight * blurY * 0.05
@@ -103,7 +105,7 @@ function calcPos() {
     hContent = canvasHeight * blurY * 0.18
 }
 
-function constrain(value, min, max) {
+function myConstrain(value, min, max) {
     return Math.max(min, Math.min(max, value));
 }
 
@@ -167,7 +169,7 @@ function setup() {
     title()
     // 主题
     texts = []
-    texts.push(new HighlightText(topicData.en, topicData.zh, canvasWidth / 2, yTopic, loadSound(topicAudioData), sTopic, CENTER))
+    texts.push(new HighlightText(topicData.en, topicData.zh, canvasWidth / 2, yTopic, topicAudio, sTopic, CENTER))
     // 正文
     for (let i = 0; i < data.length; i++) {
         let y = yContent + hContent * i
@@ -286,7 +288,6 @@ class HighlightText {
 
     update() {
         if (this.currentCharIndex === 0 && this.timer === 0 && !this.hasPlayed) {
-            // this.audio.rate(0.9)
             this.audio.play()
             this.audio.connect(destination)
             this.hasPlayed = true
@@ -295,6 +296,7 @@ class HighlightText {
             return
         }
         this.timer++
+
         if (this.timer >= floor(this.highlightDuration)) {
             this.timer = 0
             this.currentCharIndex++
