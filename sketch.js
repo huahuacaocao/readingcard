@@ -63,7 +63,7 @@ const data = []
 
 // 预加载资源
 function preload() {
-    backgroundImgBlur = loadImage("./backgroundblur.jpeg")
+    backgroundImgBlur = loadImage("./resource/backgroundblur.jpeg")
     backgroundImgClear = loadImage(imageData[0])
     for (let i = 0; i < contentData.length; i++) {
         data[i] = {
@@ -101,7 +101,7 @@ function calcPos() {
     let lineSpacing = canvasHeight * 0.04
     yTitle = canvasHeight * blurY * 0.05
     yTopic = yTitle + sTitle + lineSpacing
-    yContent = yTopic + sTopic + lineSpacing
+    yContent = yTopic + sTopic + lineSpacing * 2
     hContent = canvasHeight * blurY * 0.18
 }
 
@@ -258,8 +258,10 @@ class HighlightText {
         textAlign(LEFT, CENTER)
         textSize(this.tSize)
         let x = this.x
+        let xStart, xEnd
         if (this.pos == CENTER) {
             x -= this.enText.length * textWidth(this.enText[0]) / 2
+            xStart = x
         }
         for (let j = 0; j < this.enText.length; j++) {
             if (j < this.currentCharIndex) {
@@ -273,10 +275,12 @@ class HighlightText {
             text(this.enText[j], x, this.y)
             x += textWidth(this.enText[j])
         }
+        xEnd = x
         textSize(this.tSize)
         let yOffset = textSize() * 1.5 // 增大中英文之间的间距
         x = this.x
         if (this.pos == CENTER) {
+            x = (xEnd + xStart) / 2
             x -= this.zhText.length * textWidth(this.zhText[0]) / 2
         }
         fill(0, 102, 204)
