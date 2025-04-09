@@ -38,6 +38,18 @@ function backgroundImage() {
     let blurYPos = (canvasHeight - displayBlurH) / 2;
     bgLayer.image(backgroundImgBlur, blurX, blurYPos, displayBlurW, displayBlurH)
 
+    // 绘制大的渐变遮罩（覆盖整个画布）
+    bgLayer.noStroke();
+    bgLayer.fill(255, 255, 255, 120);
+    bgLayer.rect(0, 0, canvasWidth, canvasHeight * blurY)
+
+    let a = 50
+    for (let y = 0; y < a; y++) {
+        let alpha = map(y, 0, a, 120, 0)
+        bgLayer.stroke(255, 255, 255, alpha)
+        bgLayer.line(0, y + canvasHeight * blurY, canvasWidth, y + canvasHeight * blurY)
+    }
+
     // 居中显示下方清晰图片
     let clearX = (canvasWidth - displayClearW) / 2;
 
@@ -58,7 +70,7 @@ function backgroundImage() {
 
 // 预加载资源
 function preload() {
-    backgroundImgBlur = loadImage("../resource/bg_beige3.png")
+    backgroundImgBlur = loadImage("../resource/green_1.png")
     backgroundImgClear = loadImage(imageData[0])
     for (let i = 0; i < contentData.length; i++) {
         data[i] = {
@@ -192,6 +204,9 @@ function title() {
     textLayer.text("每日英语晨读", canvasWidth / 2, yTitle);
 }
 
+let petals = []; // 存储花瓣
+let windAngle = 0; // 风的角度
+
 function draw() {
     image(bgLayer, 0, 0);
     textLayer.clear()
@@ -203,7 +218,21 @@ function draw() {
             texts[i].update();
         }
     }
+    // 风的动态变化
+    windAngle += 0.02;
+    // 生成花瓣
+    if (random(1) < 0.1) {
+        petals.push(new Petal());
+    }
 
+    // 更新和显示花瓣
+    for (let i = petals.length - 1; i >= 0; i--) {
+        petals[i].update(windAngle)
+        petals[i].displayOnLayer(textLayer)
+        if (petals[i].posY > height + 20) {
+            petals.splice(i, 1)
+        }
+    }
 
     image(textLayer, 0, 0);
 }
@@ -267,12 +296,10 @@ class HighlightText {
         }
         for (let j = 0; j < this.enText.length; j++) {
             if (j < this.currentCharIndex) {
-                // layer.fill(255, 140, 0);
-                // layer.fill(255, 140, 0);
-                layer.fill(0, 102, 204)
+                layer.fill(255, 0, 0)
             } else if (j === this.currentCharIndex) {
-                let col = lerpColor(color(0, 0, 0), color(0, 102, 204), this.highlightProgress);
-                layer.fill(col);
+                let col = lerpColor(color(0, 0, 0), color(255, 0, 0), this.highlightProgress);
+                layer.fill(col)
             } else {
                 layer.fill(0, 0, 0);
             }
@@ -365,5 +392,44 @@ class HighlightText {
         this.hasPlayed = false
         this.audio.stop()
         this.setHighlightDuration()
+    }
+}
+
+
+// 花瓣类
+class Petal {
+    constructor() {
+        this.posX = random(-50, width);
+        this.posY = random(-50, 0);
+        this.size = random(3, 12);
+        this.speed = random(1, 2);
+        this.angle = random(TWO_PI);
+        this.color = color(random(255, 255), random(100, 200), random(100, 150), 200)
+        // this.color = color(random(255, 255), random(100, 200), random(100, 150), 200); // 暖色调
+    }
+
+    update(wind) {
+        this.posY += this.speed;
+        this.posX += sin(wind) * 2 + random(-0.5, 0.5); // 风和随机摆动
+        this.angle += random(-0.1, 0.1); // 旋转
+    }
+
+    // display() {
+    //     push();
+    //     translate(this.posX, this.posY);
+    //     rotate(this.angle);
+    //     noStroke();
+    //     fill(this.color);
+    //     ellipse(0, 0, this.size, this.size * 0.6); // 椭圆形花瓣
+    //     pop();
+    // }
+    displayOnLayer(layer) {
+        layer.push()
+        layer.translate(this.posX, this.posY);
+        layer.rotate(this.angle);
+        layer.noStroke();
+        layer.fill(this.color);
+        layer.ellipse(0, 0, this.size, this.size * 0.6); // 椭圆形花瓣
+        layer.pop();
     }
 }
