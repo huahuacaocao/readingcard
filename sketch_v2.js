@@ -21,8 +21,6 @@ const DOWN_IMG_HEIGHT_RATIO = 0.35;
 const TITLE_Y_RATIO = 0.05;
 const CONTENT_HEIGHT_RATIO = 0.16;
 
-
-
 // 绘制背景图
 function drawBackgroundImage() {
     downImgHeight = canvasHeight * DOWN_IMG_HEIGHT_RATIO;
@@ -46,6 +44,17 @@ function drawBackgroundImage() {
     const blurYPos = (canvasHeight - displayBlurH) / 2;
     bgLayer.image(backgroundImgBlur, blurX, blurYPos, displayBlurW, displayBlurH);
 
+    bgLayer.noStroke();
+    bgLayer.fill(255, 255, 255, 120);
+    bgLayer.rect(0, 0, canvasWidth, canvasHeight * blurY);
+
+    const gradientHeight = 50;
+    for (let y = 0; y < gradientHeight; y++) {
+        const alpha = map(y, 0, gradientHeight, 120, 0);
+        bgLayer.stroke(255, 255, 255, alpha);
+        bgLayer.line(0, y + canvasHeight * blurY, canvasWidth, y + canvasHeight * blurY);
+    }
+
     const clearX = (canvasWidth - displayClearW) / 2;
     const fadeHeight = displayClearH / 2;
     for (let y = 0; y < displayClearH; y++) {
@@ -63,7 +72,7 @@ function drawBackgroundImage() {
 
 // 预加载资源
 function preload() {
-    backgroundImgBlur = loadImage("resource/img/bgi3.png");
+    backgroundImgBlur = loadImage("resource/img/bgi.png");
     backgroundImgClear = loadImage(imageData[0]);
     for (let i = 0; i < contentData.length; i++) {
         contentDataArray[i] = {
@@ -137,6 +146,7 @@ function setupRecording() {
         a.click();
         recordedChunks = [];
     };
+
     backgroundMusic.connect(destination);
 }
 
@@ -195,6 +205,7 @@ function drawTitle() {
 
 // 绘制循环
 let petals = [];
+let windAngle = 0;
 
 function draw() {
     image(bgLayer, 0, 0);
@@ -205,6 +216,9 @@ function draw() {
         texts[i].displayOnLayer(textLayer);
         if (i === currentIndex) texts[i].update();
     }
+
+    windAngle += 0.02;
+    if (random(1) < 0.1) petals.push(new Petal());
 
     for (let i = petals.length - 1; i >= 0; i--) {
         petals[i].update(windAngle);
@@ -329,5 +343,33 @@ class HighlightText {
         this.hasPlayed = false;
         this.audio.stop();
         this.setHighlightDuration();
+    }
+}
+
+// 花瓣类
+class Petal {
+    constructor() {
+        this.posX = random(-50, width);
+        this.posY = random(-50, 0);
+        this.size = random(3, 12);
+        this.speed = random(1, 2);
+        this.angle = random(TWO_PI);
+        this.color = color(random(255, 255), random(100, 200), random(100, 150), 200);
+    }
+
+    update(wind) {
+        this.posY += this.speed;
+        this.posX += Math.sin(wind) * 2 + random(-0.5, 0.5);
+        this.angle += random(-0.1, 0.1);
+    }
+
+    displayOnLayer(layer) {
+        layer.push();
+        layer.translate(this.posX, this.posY);
+        layer.rotate(this.angle);
+        layer.noStroke();
+        layer.fill(this.color);
+        layer.ellipse(0, 0, this.size, this.size * 0.6);
+        layer.pop();
     }
 }
