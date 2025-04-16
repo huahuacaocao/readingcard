@@ -1,5 +1,5 @@
 // 主程序
-const FRAMERATE = 30;
+const FRAMERATE = 60;
 let texts = [];
 let currentIndex = -1;
 let canvasWidth, canvasHeight;
@@ -10,10 +10,11 @@ let enFont;
 const contentDataArray = [];
 let textLayer, bgLayer;
 let backgroundMusic;
+let multiple = 2
 
 // 常量定义
-const MIN_FONT_SIZE = 8;
-const MAX_FONT_SIZE = 28;
+const MIN_FONT_SIZE = 8 * multiple;
+const MAX_FONT_SIZE = 28 * multiple;
 const BASE_FONT_SCALE = 0.04;
 const LINE_SPACING_SCALE = 0.04;
 const BLUR_Y_RATIO = 0.65;
@@ -45,12 +46,12 @@ function drawBackgroundImage() {
     bgLayer.image(backgroundImgBlur, blurX, blurYPos, displayBlurW, displayBlurH);
 
     bgLayer.noStroke();
-    bgLayer.fill(255, 255, 255, 120);
+    bgLayer.fill(255, 255, 255, 10);
     bgLayer.rect(0, 0, canvasWidth, canvasHeight * blurY);
 
     const gradientHeight = 50;
     for (let y = 0; y < gradientHeight; y++) {
-        const alpha = map(y, 0, gradientHeight, 120, 0);
+        const alpha = map(y, 0, gradientHeight, 10, 0);
         bgLayer.stroke(255, 255, 255, alpha);
         bgLayer.line(0, y + canvasHeight * blurY, canvasWidth, y + canvasHeight * blurY);
     }
@@ -72,7 +73,7 @@ function drawBackgroundImage() {
 
 // 预加载资源
 function preload() {
-    backgroundImgBlur = loadImage("resource/img/bgi.png");
+    backgroundImgBlur = loadImage("resource/img/bgi9.png");
     backgroundImgClear = loadImage(imageData[0]);
     for (let i = 0; i < contentData.length; i++) {
         contentDataArray[i] = {
@@ -83,7 +84,8 @@ function preload() {
     }
     topicAudio = loadSound(topicAudioData);
     enFont = loadFont('resource/font/MS Song Regular.ttf');
-    backgroundMusic = loadSound('resource/audio/bgm.mp3');
+    backgroundMusic = loadSound('resource/audio/bgm2.mp3');
+    backgroundMusic.setVolume(0.05);
 }
 
 // 计算画布大小
@@ -94,6 +96,8 @@ function calculateCanvasSize() {
         canvasWidth = windowWidth * 0.9;
         canvasHeight = (canvasWidth * 16) / 9;
     }
+    canvasWidth = canvasWidth * multiple
+    canvasHeight = canvasHeight * multiple
 }
 
 // 计算文本位置和大小
@@ -138,7 +142,7 @@ function setupRecording() {
 
     mediaRecorder.ondataavailable = (e) => recordedChunks.push(e.data);
     mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: "video/mp4" });
+        const blob = new Blob(recordedChunks, {type: "video/mp4"});
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -198,7 +202,7 @@ function keyPressed() {
 // 绘制标题
 function drawTitle() {
     textLayer.fill(0, 0, 0);
-    textLayer.textSize(30);
+    textLayer.textSize(30 * multiple);
     textLayer.textAlign(CENTER, TOP);
     textLayer.text("每日英语晨读", canvasWidth / 2, yTitle);
 }
@@ -319,7 +323,7 @@ class HighlightText {
             this.hasPlayed = true;
         }
         if (this.isFinished) return;
-        this.timer++;
+        this.timer += multiple
         if (this.timer >= Math.floor(this.highlightDuration)) {
             this.timer = 0;
             this.currentCharIndex++;

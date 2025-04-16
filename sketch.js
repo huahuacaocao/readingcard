@@ -10,18 +10,17 @@ let enFont;
 const contentDataArray = [];
 let textLayer, bgLayer;
 let backgroundMusic;
+let multiple = 2
 
 // 常量定义
-const MIN_FONT_SIZE = 8;
-const MAX_FONT_SIZE = 28;
+const MIN_FONT_SIZE = 8 * multiple;
+const MAX_FONT_SIZE = 28 * multiple;
 const BASE_FONT_SCALE = 0.04;
 const LINE_SPACING_SCALE = 0.04;
 const BLUR_Y_RATIO = 0.65;
 const DOWN_IMG_HEIGHT_RATIO = 0.35;
 const TITLE_Y_RATIO = 0.05;
 const CONTENT_HEIGHT_RATIO = 0.16;
-
-
 
 // 绘制背景图
 function drawBackgroundImage() {
@@ -63,7 +62,7 @@ function drawBackgroundImage() {
 
 // 预加载资源
 function preload() {
-    backgroundImgBlur = loadImage("resource/img/bgi3.png");
+    backgroundImgBlur = loadImage("resource/img/bgi8.jpg");
     backgroundImgClear = loadImage(imageData[0]);
     for (let i = 0; i < contentData.length; i++) {
         contentDataArray[i] = {
@@ -85,6 +84,8 @@ function calculateCanvasSize() {
         canvasWidth = windowWidth * 0.9;
         canvasHeight = (canvasWidth * 16) / 9;
     }
+    canvasWidth = canvasWidth * multiple
+    canvasHeight = canvasHeight * multiple
 }
 
 // 计算文本位置和大小
@@ -129,7 +130,7 @@ function setupRecording() {
 
     mediaRecorder.ondataavailable = (e) => recordedChunks.push(e.data);
     mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: "video/mp4" });
+        const blob = new Blob(recordedChunks, {type: "video/mp4"});
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -188,7 +189,7 @@ function keyPressed() {
 // 绘制标题
 function drawTitle() {
     textLayer.fill(0, 0, 0);
-    textLayer.textSize(30);
+    textLayer.textSize(30 * multiple);
     textLayer.textAlign(CENTER, TOP);
     textLayer.text("每日英语晨读", canvasWidth / 2, yTitle);
 }
@@ -305,7 +306,7 @@ class HighlightText {
             this.hasPlayed = true;
         }
         if (this.isFinished) return;
-        this.timer++;
+        this.timer += multiple;
         if (this.timer >= Math.floor(this.highlightDuration)) {
             this.timer = 0;
             this.currentCharIndex++;
